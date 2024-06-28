@@ -80,7 +80,7 @@ function [w, CR] = eigenmethod(P)
 end
 
 % Ορίζουμε τις παραμέτρους της προσομοίωσης Monte Carlo
-N = 1e2; % Αριθμός επαναλήψεων
+N = 1e4; % Αριθμός επαναλήψεων
 s_values = [0.2 0.1 0.6]; % Τιμές δύναμης παραμόρφωσης
 
 % Αρχικοποιούμε τον πίνακα για την αποθήκευση των PRR
@@ -98,7 +98,6 @@ for k = 1:length(s_values)
   fu_w = functionality_w; % Αρχικοποίηση βαρών λειτουργικότητας
   aw = alt_w; % Αρχικοποίηση βαρών εναλλακτικών
   ScenarioValue_ntimes = zeros(N, 4); % Αρχικοποίηση προτεραιοτήτων εναλλακτικών για κάθε επανάληψη
-disp('1');
   for iter = 1:N
     for i = 1:experts
       % Παραμόρφωση των πινάκων
@@ -106,13 +105,13 @@ disp('1');
       c_w(i,:) = pertub_matrix(cost_vector(i), s); % Παραμορφωμένος πίνακας κόστους
       us_w(i,:) = pertub_matrix(usability_vector(i), s); % Παραμορφωμένος πίνακας χρηστικότητας
       fu_w(i,:) = pertub_matrix(functionality_vector(i), s); % Παραμορφωμένος πίνακας λειτουργικότητας
-disp('2');
+
 
       for j = 1:nfac
         aw(i,j) = pertub_matrix(alt_matrix(i,j), s); % Παραμορφωμένος πίνακας εναλλακτικών
       end
     end
-disp('3');
+
 
     % Εκτίμηση μέσων βαρών και σχετικών βαθμολογιών για τους ειδικούς
     ncr_w = mean(Cr_w, 1);
@@ -126,8 +125,6 @@ disp('3');
     for i = 1:4 % Εναλλακτικές
       ScenarioValue_ntimes(iter,i) = 0;
       Nfcur = 0;
-disp('4');
-
       for k = 1:3 % Κριτήρια
         Nfcur = Nfcur + fac(k); % Nfcur δείχνει το μέγιστο j για κάθε k
         for j=j+1:Nfcur % Παράγοντες
